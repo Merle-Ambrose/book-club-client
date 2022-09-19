@@ -1,22 +1,7 @@
 import React, { useState } from 'react';
-import { domainAPI, domainClient } from "./utils/mongoDBConnect";
+import { domainAPI } from "./utils/mongoDBConnect";
+import { validateEmail, unameUnique } from './utils/validateUserInfo';
 import axios from 'axios';
-
-function validateEmail(email) {
-  const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return res.test(String(email).toLowerCase());
-}
-
-async function unameUnique(uname) {
-    axios.get(domainAPI + "register/" + uname, {crossdomain: true})
-        .then((response) => {
-            return response.data.isUnique;
-        })
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
-}
 
 function Register() {
     let [warningMsg, setWarningMsg] = new useState('');
@@ -63,7 +48,6 @@ function Register() {
             document.getElementById('label-lname').style.color = "Black";
         }
         // CHECK IF THE USERNAME IS UNIQUE!
-        console.log(unameUnique(uname));
         if(!uname) {
             warningFlag = true;
             document.getElementById('label-uname').style.color = "Red";
@@ -115,7 +99,14 @@ function Register() {
         }
         else {
             setWarningMsg('');
-            axios.get(domainAPI + "register/" + uname + "/" + email + "/" + pwd + "/" + fname + "/" + lname + "/" + byear, {crossdomain: true})
+            axios.post(domainAPI + "register/", {
+                uname: uname,
+                email: email,
+                pwd: pwd,
+                fname: fname,
+                lname: lname,
+                byear: byear
+            }, {crossdomain: true})
                 .then((response) => {
                     window.location.assign('/login');
                 })
@@ -133,7 +124,7 @@ function Register() {
                 <p>{ warningMsg }</p>
                 <p>{ pwdMatchMsg }</p>
                 <p>{ unameUniqueMsg }</p>
-                {(warningMsg || pwdMatchMsg || unameUnique) ? <br/> : null}
+                {(warningMsg || pwdMatchMsg || unameUniqueMsg) ? <br/> : null}
             </div>
             <label htmlFor="fname" id="label-fname">First Name:</label><br/>
             <input type="text" id="fname" name="fname"/><br/>

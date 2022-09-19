@@ -1,50 +1,35 @@
-// https://medium.com/zero-equals-false/how-to-connect-a-react-frontend-with-node-js-bccb1fb7e2bb
 
-import React from 'react';
-import {Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Test from './Test';
+import Login from './Login';
 import Register from './Register';
 import Book from './Book';
 import Temp from './Temp';
+import WriteBook from './WriteBook';
+import ListWrittenBooks from './ListWrittenBooks';
+import CreateBook from './CreateBook';
+import EditBook from './EditBook';
+import FilterBooks from './FilterBooks';
+import UpdateProfile from './UpdateProfile';
 
 function App() {
-  /*
-  // Test stuff
-  useEffect(() => {
-   axios.get("http://localhost:9000/test/", {crossdomain: true})
-    .then(response => {
-      console.log(response.data.users);
-      setBackendData(response.data.users);
-    });
-  }, []);
-  */
-
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/book/:bookId/chapter/:chapterId" element={<Book />} />
-          <Route path="/register" element={<Register/>} />
-          <Route path="/temp" element={<Temp/>} />
-          <Route path="/test" element={<Test/>}/>
+          <Route exact path="/" element={<FilterBooks />} />
+          <Route path="/book/:bookId/chapter/:chapterId" element={<Book />} />
+          <Route path="/write/:bookId/chapter/:chapterId" element={<WriteBook />} />
+          <Route path="/edit/:bookId" element={<EditBook />} />
+          <Route path="/dashboard" element={<ListWrittenBooks />} />
+          <Route path="/create-book" element={<CreateBook />} />
+          <Route path="/update-profile" element={<UpdateProfile/>} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/temp" element={<Temp />} />
+          <Route path="/test" element={<Test />}/>
         </Routes>
       </BrowserRouter>
-
-
-      {
-        /*
-        // Old test code
-        <ul>
-        {
-          // Old, test code
-          backendData.map((user, i) => {
-            console.log(user);
-            return (<p key={i}>{user}</p>);
-          })
-        }
-        </ul>
-        */
-      }
     </div>
   );
 }

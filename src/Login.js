@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { domainAPI, domainClient } from "./utils/mongoDBConnect";
+import { domainAPI } from "./utils/mongoDBConnect";
 import axios from 'axios';
 
-async function loginSuccessful(uname, pwd) {
-    axios.get(domainAPI + "login/" + uname + "/" + pwd, {crossdomain: true})
-        .then((response) => {
-            return response.data.loginSuccess;
-        })
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
+async function getLogin(uname, pwd) {
+    return axios.post(domainAPI + "login",
+    {
+        uname: uname,
+        pwd: pwd
+    },
+    {crossdomain: true})
+        .then(result => result.data)
+        .catch(error => null);
 }
 
 function Login() {
-    let [warningMsg, setWarningMsg] = new useState('');
-    let [msgLoginUnsuccessful, setMsgLoginUnsuccessful] = new useState('');
+    const [warningMsg, setWarningMsg] = new useState('');
+    const [msgLoginUnsuccessful, setMsgLoginUnsuccessful] = new useState('');
 
     function submitForm(e) {
         // Prevent form submission
@@ -51,23 +51,23 @@ function Login() {
         else {
             setWarningMsg('');
             warningFlag = false;
-            if(!loginSuccessful(uname, pwd)) {
-                document.getElementById('label-uname').style.color = "Red";
-                setMsgLoginUnsuccessful('User not found with those credentials. Please try again.');
-            }
-            else {
-                setMsgLoginUnsuccessful('');
-                axios.get(domainAPI + "login/" + uname + "/" + pwd, {crossdomain: true})
-                    .then((response) => {
-                        window.location.assign('/dashboard');
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        console.log("Something went wrong.");
-                    });
-            }
+            getLogin(uname, pwd)
+                .then((userLoginInfo) => {
+                    if(!userLoginInfo) {
+                        document.getElementById('label-uname').style.color = "Red";
+                        document.getElementById('label-pwd').style.color = "Red";
+                        setMsgLoginUnsuccessful('User not found with those credentials. Please try again.');
+                    }
+                    else {
+                        setMsgLoginUnsuccessful('');
+                        // Store the user's login credentials
+                        // to let the user sign in later
+                        // (w/out logging in)
+                        localStorage.setItem("accessToken", userLoginInfo.accessToken);
+                        window.location.assign("/dashboard");
+                    }
+                });
         }
-        
     }
 
     return (
