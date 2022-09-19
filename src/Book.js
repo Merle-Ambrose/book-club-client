@@ -3,8 +3,6 @@ import { useParams } from 'react-router-dom';
 import { domainAPI, domainClient } from "./utils/mongoDBConnect";
 import axios from "axios";
 
-// Example URL:
-// http://localhost:3000/book/62a91602fbe1f257871ed7ba/chapter/0
 function Book() {
   const { bookId, chapterId } = useParams();
   const [ chapterTitle, setChapterTitle ] = useState('Chapter Title');

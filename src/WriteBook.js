@@ -5,8 +5,6 @@ import { authAxios } from "./utils/axiosConnect";
 import { isUserLoggedIn } from "./utils/validateUserInfo";
 import axios from "axios";
 
-// Example URL:
-// http://localhost:3000/write/62a91602fbe1f257871ed7ba/chapter/0
 function WriteBook() {
   const { bookId, chapterId } = useParams();
   const [ leftChapterValid, setLeftChapterValid ] = useState(false);
