@@ -1,10 +1,12 @@
 import React from 'react';
 import { authAxios } from './utils/axiosConnect';
 import { domainAPI } from './utils/mongoDBConnect';
+import { isUserLoggedIn } from './utils/validateUserInfo';
 
 function CreateBook() {
     function createBook(e) {
         e.preventDefault();
+        isUserLoggedIn();
 
         // Check if required fields are filled in
         let title = document.getElementById('title').value;

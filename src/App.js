@@ -1,10 +1,9 @@
 
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import Test from './Test';
 import Login from './Login';
+import Logout from './Logout';
 import Register from './Register';
 import Book from './Book';
-import Temp from './Temp';
 import WriteBook from './WriteBook';
 import ListWrittenBooks from './ListWrittenBooks';
 import CreateBook from './CreateBook';
@@ -25,9 +24,8 @@ function App() {
           <Route path="/create-book" element={<CreateBook />} />
           <Route path="/update-profile" element={<UpdateProfile/>} />
           <Route path="/register" element={<Register />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/temp" element={<Temp />} />
-          <Route path="/test" element={<Test />}/>
         </Routes>
       </BrowserRouter>
     </div>

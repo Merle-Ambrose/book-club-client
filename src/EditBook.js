@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { authAxios } from './utils/axiosConnect';
 import { domainAPI } from './utils/mongoDBConnect';
+import { isUserLoggedIn } from './utils/validateUserInfo';
 
 function EditBook() {
     const { bookId } = useParams();
@@ -21,6 +22,7 @@ function EditBook() {
     }
 
     function deleteBook() {
+        isUserLoggedIn();
         setNoAccessStatus();
         authAxios.post("/bookDelete", {
             bookId: bookId
@@ -35,6 +37,7 @@ function EditBook() {
 
     function updateBook(e) {
         e.preventDefault();
+        isUserLoggedIn();
 
         // Check if required fields are filled in
         let title = document.getElementById('title').value;

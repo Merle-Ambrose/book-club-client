@@ -130,7 +130,7 @@ function FilterBooks() {
       {listBooksOnPage.map((book, index) => {
         return (<div key={index}>
           <hr />
-          <h1><a href={"/book/" + book._id + "/chapter/0"}>Book Title: {book.title}</a></h1>
+          <h1>Title: <a href={"/book/" + book._id + "/chapter/0"}>{book.title}</a></h1>
           <p>Summary: {book.summary}</p>
           <p>Genre: {book.genre}</p>
           <p>Trigger Warnings: {book.tws.join(", ")}</p>

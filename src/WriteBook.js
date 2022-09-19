@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { domainAPI, domainClient } from "./utils/mongoDBConnect";
 import { authAxios } from "./utils/axiosConnect";
+import { isUserLoggedIn } from "./utils/validateUserInfo";
 import axios from "axios";
 
 // Example URL:
@@ -14,6 +15,7 @@ function WriteBook() {
 
   // Button that saves the user's work
   function saveChapter() {
+    isUserLoggedIn();
     authAxios.put(domainAPI + "updateChapter", {
       title: document.getElementById('title').value,
       authorNote: document.getElementById('authorNote').value,
@@ -57,6 +59,7 @@ function WriteBook() {
 
   
   function addChapter() {
+    isUserLoggedIn();
     authAxios.post(domainAPI + "createEmptyChapter", {
       bookId: bookId
     }, {crossdomain: true})
@@ -77,6 +80,7 @@ function WriteBook() {
   
   // Button that deletes the current chapter
   function deleteChapter() {
+    isUserLoggedIn();
     authAxios.post(domainAPI + "chapterDelete", {
       bookId: bookId,
       chapterIndex: chapterId

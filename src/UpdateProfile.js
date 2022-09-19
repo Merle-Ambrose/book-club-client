@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { authAxios } from './utils/axiosConnect';
 import { domainAPI } from './utils/mongoDBConnect';
 import { validateEmail } from './utils/validateUserInfo';
+import { isUserLoggedIn } from './utils/validateUserInfo';
 
 function UpdateProfile() {
     const [warningMsg, setWarningMsg] = new useState('');
@@ -11,6 +12,7 @@ function UpdateProfile() {
     function updateUser(e) {
         // Prevent form submission
         e.preventDefault();
+        isUserLoggedIn();
 
         // Trim all inputted values
         let warningFlag = false;
@@ -113,6 +115,7 @@ function UpdateProfile() {
     }
 
     useEffect(() => {
+        isUserLoggedIn();
         authAxios.get(domainAPI + "getUser", {crossdomain: true})
             .then((result) => {
                 document.getElementById("fname").value = result.data.fname;

@@ -17,3 +17,11 @@ export async function unameUnique(uname) {
             return false;
         });
 }
+
+export async function isUserLoggedIn() {
+    if(!localStorage.getItem('accessToken')) {
+        console.log("User cannot perform this action because they aren't logged in.");
+        alert("Please log in before completing this action.");
+        window.location.assign("/login");
+    }
+}

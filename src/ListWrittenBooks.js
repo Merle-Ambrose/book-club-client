@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { authAxios } from './utils/axiosConnect';
 import { domainAPI } from './utils/mongoDBConnect';
+import { isUserLoggedIn } from './utils/validateUserInfo';
 
 function ListWrittenBooks() {
     const [userBooks, setUserBooks] = useState([]);
 
     useEffect(() => {
+        isUserLoggedIn();
         authAxios.get(domainAPI + "getAllUserBooks", { crossdomain: true })
             .then((result) => {
                 let books = result.data;
