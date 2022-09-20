@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { domainAPI, domainClient } from "./utils/mongoDBConnect";
 import axios from "axios";
+import { activeRead } from "./utils/w3utils";
 
 function Book() {
   const { bookId, chapterId } = useParams();
@@ -12,6 +13,7 @@ function Book() {
   const [ rightChapterValid, setRightChapterValid ] = useState(false);
 
   useEffect(() => {
+    activeRead();
     // Check the url and make sure it is in the right format
     axios.get(domainAPI + "book/" + bookId + "/chapter/" + chapterId + "/true", {crossdomain: true})
       .then((response) => {
@@ -37,12 +39,15 @@ function Book() {
   }, [bookId, chapterId]);
 
     return (<>
-        <h1>{chapterTitle}</h1>
-        <h4>Author's Note: {authorNote}</h4>
-        <hr></hr>
-        <p>{textContents}</p>
-        { !leftChapterValid || <a href={domainClient + "book/" + bookId + "/chapter/" + (parseInt(chapterId)-1) + "/"}><button>Previous chapter</button></a> }
-        { !rightChapterValid || <a href={domainClient + "book/" + bookId + "/chapter/" + (parseInt(chapterId)+1) + "/"}><button>Next chapter</button></a> }
+      <div className="w3-margin">
+        <h1>Chapter: {chapterTitle || ("Chapter " + chapterId)}</h1>
+        <h4>Author's Note: {authorNote || "N/A"}</h4>
+        <p className="largerText">{textContents || "N/A"}</p>
+        <div className="w3-bar">
+          { !leftChapterValid || <a className="w3-bar-item w3-button-black w3-hover-w3 w3-border w3-round-small removeTextUnderscore" href={domainClient + "book/" + bookId + "/chapter/" + (parseInt(chapterId)-1) + "/"}>Previous chapter</a> }
+          { !rightChapterValid || <a className="w3-bar-item w3-button-black w3-hover-w3 w3-border w3-round-small removeTextUnderscore" href={domainClient + "book/" + bookId + "/chapter/" + (parseInt(chapterId)+1) + "/"}>Next chapter</a> }
+        </div>
+              </div>
     </>);
 }
 

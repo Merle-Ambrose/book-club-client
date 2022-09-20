@@ -17,34 +17,34 @@ function App() {
   return (
     <>
       {/* Sidebar menu */}
-      <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style={{ zIndex: '3', width: '300px' }} id="mySidebar"><br />
-        <div class="w3-container">
-          <a href="#" onClick={w3_close} class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
-            <i class="fa fa-remove"></i>
+      <nav className="w3-sidebar w3-collapse w3-white w3-animate-left" style={{ zIndex: '3', width: '300px' }} id="mySidebar"><br />
+        <div className="w3-container">
+          <a href="#" onClick={w3_close} className="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+            <i className="fa fa-remove"></i>
           </a>
-          <img src="/w3images/avatar_g2.jpg" style={{ width: '45%' }} class="w3-round" /><br /><br />
+          <a href="/"><img src="/img/logo.png" style={{ width: '45%' }} className="w3-round" /></a><br /><br />
           <a href="/"><h4><b>BOOK CLUB</b></h4></a>
+          <p className="w3-text-grey">Website by: <a href="https://www.polinatik.com/">Polina Tikhomirova</a></p>
         </div>
-        <div class="w3-bar-block">
-          <a href="#portfolio" onClick={w3_close} class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>PORTFOLIO</a>
-          <a href="#about" onClick={w3_close} class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>ABOUT</a>
-          <a href="#contact" onClick={w3_close} class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>CONTACT</a>
+        <div className="w3-bar-block">
+          <a href="/" id="readingHeaderLink" onClick={w3_close} className="w3-bar-item w3-button w3-padding"><i className="fa fa-th-large fa-fw w3-margin-right"></i>READ</a>
+          <a href="/dashboard" id="writingHeaderLink" onClick={w3_close} className="w3-bar-item w3-button w3-padding"><i className="fa fa-user fa-fw w3-margin-right"></i>WRITE</a>
+          <a href="/update-profile" id="profileHeaderLink" onClick={w3_close} className="w3-bar-item w3-button w3-padding"><i className="fa fa-envelope fa-fw w3-margin-right"></i>PROFILE</a>
         </div>
       </nav>
 
       {/* Overlay effect for small screens */}
-      <div class="w3-overlay w3-hide-large w3-animate-opacity" onClick={w3_close} style={{ cursor: 'pointer' }} title="close side menu" id="myOverlay"></div>
+      <div className="w3-overlay w3-hide-large w3-animate-opacity" onClick={w3_close} style={{ cursor: 'pointer' }} title="close side menu" id="myOverlay"></div>
 
       {/* Page content */}
-      <div class="w3-main" style={{ marginLeft: '300px' }}>
+      <div className="w3-main" style={{ marginLeft: '300px' }}>
         { /* Header */}
         <header>
-          <a href="#"><img src="/w3images/avatar_g2.jpg" style={{ width: '65px' }} class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity" /></a>
-          <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onClick={w3_open} ><i class="fa fa-bars"></i></span>
-          <div class="w3-container">
+          <span className="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onClick={w3_open} ><i className="fa fa-bars"></i></span>
+          <div className="w3-container">
             <div></div>
             <h1><b>Book Club</b></h1>
-            <div class="w3-section w3-bottombar"></div>
+            <div className="w3-section w3-bottombar"></div>
           </div>
         </header>
 

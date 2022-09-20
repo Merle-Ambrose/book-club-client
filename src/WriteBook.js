@@ -4,6 +4,7 @@ import { domainAPI, domainClient } from "./utils/mongoDBConnect";
 import { authAxios } from "./utils/axiosConnect";
 import { isUserLoggedIn } from "./utils/validateUserInfo";
 import axios from "axios";
+import { activeWrite } from "./utils/w3utils";
 
 function WriteBook() {
   const { bookId, chapterId } = useParams();
@@ -30,6 +31,7 @@ function WriteBook() {
   }
 
   useEffect(() => {
+    activeWrite();
     // Check the url and make sure it is in the right format
     axios.get(domainAPI + "book/" + bookId + "/chapter/" + chapterId + "/false", { crossdomain: true })
       .then((response) => {
@@ -100,22 +102,27 @@ function WriteBook() {
       });
   }
 
-  return (<>
-    <h1 style={{ display: 'none' }} id="errorHeader">Chapter isn't accessible.</h1>
-    <form>
-      <h1>Chapter Title: <input type="text" id="title" name="title"></input></h1>
-      <h4>Author's Note: <input type="text" id="authorNote" name="authorNote"></input></h4>
-      <hr></hr>
-      <textarea id="textContents" name="textContents"></textarea><br /><br />
-    </form>
-    <button type="button" onClick={saveChapter}>Save work</button><br /><br />
-
-    {!leftChapterValid || <><a href={domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) - 1) + "/"}><button>Previous chapter</button></a><br /><br /></>}
-    {!rightChapterValid || <><a href={domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) + 1) + "/"}><button>Next chapter</button></a><br /></>}
-    {!rightChapterValid && <button onClick={addChapter}>Add chapter</button>}
-    <br /><br /><button type="button" onClick={deleteChapter}>Delete Chapter</button><br /><br />
-    <a href={"/edit/" + bookId}><button>Edit book data</button></a>
-  </>);
+  return (
+    <>
+      <div className="w3-margin">
+        <h1 style={{ display: 'none' }} id="errorHeader">Chapter isn't accessible.</h1>
+        <form>
+          <h1><input type="text" id="title" name="title" className="chapterTitle" placeholder="Chapter Title"></input></h1>
+          <h4><input type="text" id="authorNote" name="authorNote" placeholder="Author's Note"></input></h4>
+          <hr></hr>
+          <textarea id="textContents" name="textContents" placeholder="Text for chapter goes here..."></textarea><br /><br />
+        </form>
+        <div className="w3-bar">
+          <button className="w3-btn w3-white w3-border w3-border-black w3-round w3-margin-top" type="button" onClick={saveChapter}>Save work</button><br /><br />
+          {!leftChapterValid || <><a className="w3-bar-item w3-white w3-border w3-border-black w3-round w3-hover-black w3-border w3-round-small removeTextUnderscore w3-margin-right" href={domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) - 1) + "/"}>Previous chapter</a></>}
+          {!rightChapterValid || <><a className="w3-bar-item w3-white w3-border w3-border-black w3-round w3-hover-black w3-border w3-round-small removeTextUnderscore" href={domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) + 1) + "/"}>Next chapter</a><br /></>}
+          {!rightChapterValid && <><br /><br /><button className="w3-btn w3-white w3-border w3-border-black w3-round w3-margin-top" onClick={addChapter}>Add chapter</button></>}
+          <br /><button type="button" className="w3-btn w3-red w3-border w3-border-black w3-round w3-margin-top" onClick={deleteChapter}>Delete Chapter</button><br /><br />
+          <a className="w3-bar-item w3-black w3-border w3-border-black w3-round w3-hover-black w3-border w3-round-small removeTextUnderscore" href={"/edit/" + bookId}>Edit book data</a>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default WriteBook;

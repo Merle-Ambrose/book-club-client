@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react';
 
 function Logout() {
-    useEffect(() => {
-        localStorage.removeItem('accessToken');
-    }, []);
+  useEffect(() => {
+    localStorage.removeItem('accessToken');
+    alert("You have been logged out. Redirecting you to the main website page...");
+    window.location.assign("/");
+  }, []);
 
   return (
-    <div>Logout</div>
+    <>
+      <div className="w3-margin">
+        <h1>Logged out!</h1>
+      </div>
+    </>
   );
 }
 

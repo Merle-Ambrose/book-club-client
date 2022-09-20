@@ -3,19 +3,21 @@ import axios from 'axios';
 import { authAxios } from './utils/axiosConnect';
 import { domainAPI } from './utils/mongoDBConnect';
 import { isUserLoggedIn } from './utils/validateUserInfo';
+import { activeWrite } from './utils/w3utils';
 
 function ListWrittenBooks() {
     const [userBooks, setUserBooks] = useState([]);
 
     useEffect(() => {
+        activeWrite();
         isUserLoggedIn();
         authAxios.get(domainAPI + "user/getAllBooks", { crossdomain: true })
             .then((result) => {
                 let books = result.data;
-                for(let i = 0; i < books.length; i++) {
+                for (let i = 0; i < books.length; i++) {
                     axios.get(domainAPI + "book/" + books[i], { crossdomain: true })
                         .then((response) => {
-                            if(response.data) {
+                            if (response.data) {
                                 setUserBooks(userBooks => [...userBooks, response.data]);
                             }
                         })
@@ -33,23 +35,31 @@ function ListWrittenBooks() {
 
     return (
         <>
-            <a href="/create-book"><button>Write new book</button></a>
-            {
-            userBooks.map((book, index) => {
-                return(
-                    <div key={index}>
-                        <hr/>
-                        <p>Book Title: {book.title}</p>
-                        <p>Genre:  {book.genre}</p>
-                        <p>Wordcount:  {book.wordcount}</p>
-                        <p>Views:  {book.views}</p>
-                        <a href={"/write/" + book._id + "/chapter/" + (book.chapters.length-1)}><button>Keep writing...</button></a><br/><br/>
-                        <a href={"/edit/" + book._id}><button>Edit book data</button></a>
-                        <hr/>
-                    </div>
-                );
-            })
-            }
+            <div className="w3-margin">
+                <div className="w3-bar w3-margin">
+                    <a className="w3-bar-item w3-hover-black w3-border w3-round-small removeTextUnderscore w3-margin-right setBackgroundWhite" href="/create-book">Start writing a new book!</a>
+                </div>
+                <div className="w3-row-padding">
+                    {
+                        userBooks.map((book, index) => {
+                            return (
+                                <div className="w3-third w3-container w3-margin-bottom" key={index}>
+                                  <div className="w3-container w3-white w3-padding">
+                                        <p>Book Title: {book.title}</p>
+                                        <p>Genre:  {book.genre}</p>
+                                        <p>Wordcount:  {book.wordcount}</p>
+                                        <p>Views:  {book.views}</p>
+                                        <div className="w3-bar">
+                                            <a className="w3-bar-item w3-hover-black w3-border w3-round-small removeTextUnderscore w3-margin-right" href={"/write/" + book._id + "/chapter/" + (book.chapters.length - 1)}>Keep writing...</a>
+                                            <a className="w3-bar-item w3-hover-black w3-border w3-round-small removeTextUnderscore" href={"/edit/" + book._id}>Edit book data</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+            </div>
         </>
     );
 }

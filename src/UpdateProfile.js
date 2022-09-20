@@ -3,6 +3,7 @@ import { authAxios } from './utils/axiosConnect';
 import { domainAPI } from './utils/mongoDBConnect';
 import { validateEmail } from './utils/validateUserInfo';
 import { isUserLoggedIn } from './utils/validateUserInfo';
+import { activeProfile } from './utils/w3utils';
 
 function UpdateProfile() {
     const [warningMsg, setWarningMsg] = new useState('');
@@ -25,39 +26,39 @@ function UpdateProfile() {
         let confPwd = document.getElementById("confPwd").value;
 
         // Validate input (display warning if false)
-        if(!byear || isNaN(byear)) {
+        if (!byear || isNaN(byear)) {
             warningFlag = true;
             document.getElementById('label-byear').style.color = "Red";
         }
-        else if(new Date().getFullYear()-parseInt(byear) < 13) {
+        else if (new Date().getFullYear() - parseInt(byear) < 13) {
             // Transfer to other site
             window.location.assign('https://poptropica.com/');
         }
         else {
             document.getElementById('label-byear').style.color = "Black";
         }
-        if(!fname) {
+        if (!fname) {
             warningFlag = true;
             document.getElementById('label-fname').style.color = "Red";
         }
         else {
             document.getElementById('label-fname').style.color = "Black";
         }
-        if(!lname) {
+        if (!lname) {
             warningFlag = true;
             document.getElementById('label-lname').style.color = "Red";
         }
         else {
             document.getElementById('label-lname').style.color = "Black";
         }
-        if(!email || !validateEmail(email)) {
+        if (!email || !validateEmail(email)) {
             warningFlag = true;
             document.getElementById('label-email').style.color = "Red";
         }
         else {
             document.getElementById('label-email').style.color = "Black";
         }
-        if(confPwd !== pwd) {
+        if (confPwd !== pwd) {
             warningFlag = true;
             document.getElementById('label-pwd').style.color = "Red";
             document.getElementById('label-confPwd').style.color = "Red";
@@ -66,27 +67,27 @@ function UpdateProfile() {
         else {
             setPwdMatchMsg("");
             // Check if both password fields were filled in
-            if(pwd && confPwd) {
+            if (pwd && confPwd) {
                 document.getElementById('label-pwd').style.color = "Black";
                 document.getElementById('label-confPwd').style.color = "Black";
                 pwdUpdate = true;
             }
         }
-        
-        if(warningFlag) {
+
+        if (warningFlag) {
             // Pull up a warning message that states
             // the user error.
             setWarningMsg('Enter valid values in the highlighted, red fields.');
         }
         else {
             setWarningMsg('');
-            if(!pwdUpdate) {
+            if (!pwdUpdate) {
                 authAxios.post(domainAPI + "user/updateNotPwd", {
                     email: email,
                     fname: fname,
                     lname: lname,
                     byear: byear
-                }, {crossdomain: true})
+                }, { crossdomain: true })
                     .then((response) => {
                         alert("User info updated!");
                     })
@@ -102,7 +103,7 @@ function UpdateProfile() {
                     fname: fname,
                     lname: lname,
                     byear: byear
-                }, {crossdomain: true})
+                }, { crossdomain: true })
                     .then((response) => {
                         alert("User info updated!");
                     })
@@ -115,8 +116,9 @@ function UpdateProfile() {
     }
 
     useEffect(() => {
+        activeProfile();
         isUserLoggedIn();
-        authAxios.get(domainAPI + "user/get", {crossdomain: true})
+        authAxios.get(domainAPI + "user/get", { crossdomain: true })
             .then((result) => {
                 document.getElementById("fname").value = result.data.fname;
                 document.getElementById("lname").value = result.data.lname;
@@ -128,29 +130,34 @@ function UpdateProfile() {
             });
     }, []);
 
-  return (
-    <form onSubmit={updateUser}>
-        <h1>Update Information</h1><br/>
-        <div style={{color: 'red'}}>
-            <p>{ warningMsg }</p>
-            <p>{ pwdMatchMsg }</p>
-            {(warningMsg || pwdMatchMsg) ? <br/> : null}
+    return (
+        <div className="w3-margin">
+            <form onSubmit={updateUser}>
+                <h1>Update Information</h1><br />
+                <div style={{ color: 'red' }}>
+                    <p>{warningMsg}</p>
+                    <p>{pwdMatchMsg}</p>
+                    {(warningMsg || pwdMatchMsg) ? <br /> : null}
+                </div>
+                <label htmlFor="fname" id="label-fname">First Name:</label><br />
+                <input type="text" id="fname" name="fname" /><br />
+                <label htmlFor="lname" id="label-lname">Last Name:</label><br />
+                <input type="text" id="lname" name="lname" /><br />
+                <label htmlFor="byear" id="label-byear">Birth Year:</label><br />
+                <input type="number" min="1904" max={new Date().getFullYear()} id="byear" name="byear" /><br />
+                <label htmlFor="email" id="label-email">Email:</label><br />
+                <input type="email" id="email" name="email" /><br />
+                <label htmlFor="pwd" id="label-pwd">New Password:</label><br />
+                <input type="password" id="pwd" name="pwd" /><br />
+                <label htmlFor="confPwd" id="label-confPwd">Confirm New Password:</label><br />
+                <input type="password" id="confPwd" name="confPwd" /><br />
+                <br /><button className="w3-btn w3-white w3-border w3-border-black w3-round w3-margin-top" type="submit">Update User Information</button>
+            </form>
+            <div className="w3-bar">
+                <br /><a className="w3-bar-item w3-red w3-border w3-border-black w3-round w3-hover-black w3-border w3-round-small removeTextUnderscore" href="/logout">Log out</a>
+            </div>
         </div>
-        <label htmlFor="fname" id="label-fname">First Name:</label><br/>
-        <input type="text" id="fname" name="fname"/><br/>
-        <label htmlFor="lname" id="label-lname">Last Name:</label><br/>
-        <input type="text" id="lname" name="lname"/><br/>
-        <label htmlFor="byear" id="label-byear">Birth Year:</label><br/>
-        <input type="number" min="1904" max={new Date().getFullYear()} id="byear" name="byear"/><br/>
-        <label htmlFor="email" id="label-email">Email:</label><br/>
-        <input type="email" id="email" name="email"/><br/>
-        <label htmlFor="pwd" id="label-pwd">New Password:</label><br/>
-        <input type="password" id="pwd" name="pwd"/><br/>
-        <label htmlFor="confPwd" id="label-confPwd">Confirm New Password:</label><br/>
-        <input type="password" id="confPwd" name="confPwd"/><br/>
-        <br/><button type="submit">Update User Information</button>
-    </form>
-  );
+    );
 }
 
 export default UpdateProfile;

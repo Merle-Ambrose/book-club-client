@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { domainAPI } from "./utils/mongoDBConnect";
 import axios from 'axios';
+import { activeProfile } from './utils/w3utils';
 
 async function getLogin(uname, pwd) {
     return axios.post(domainAPI + "login",
-    {
-        uname: uname,
-        pwd: pwd
-    },
-    {crossdomain: true})
+        {
+            uname: uname,
+            pwd: pwd
+        },
+        { crossdomain: true })
         .then(result => result.data)
         .catch(error => null);
 }
@@ -27,22 +28,22 @@ function Login() {
         let pwd = e.target.pwd.value;
 
         // Validate input (display warning if false)
-        if(!uname) {
+        if (!uname) {
             warningFlag = true;
             document.getElementById('label-uname').style.color = "Red";
         }
         else {
             document.getElementById('label-uname').style.color = "Black";
         }
-        if(!pwd) {
+        if (!pwd) {
             warningFlag = true;
             document.getElementById('label-pwd').style.color = "Red";
         }
         else {
             document.getElementById('label-pwd').style.color = "Black";
         }
-        
-        if(warningFlag) {
+
+        if (warningFlag) {
             // Pull up a warning message that states
             // the user error.
             setWarningMsg('Enter valid values in the highlighted, red fields.');
@@ -53,7 +54,7 @@ function Login() {
             warningFlag = false;
             getLogin(uname, pwd)
                 .then((userLoginInfo) => {
-                    if(!userLoginInfo) {
+                    if (!userLoginInfo) {
                         document.getElementById('label-uname').style.color = "Red";
                         document.getElementById('label-pwd').style.color = "Red";
                         setMsgLoginUnsuccessful('User not found with those credentials. Please try again.');
@@ -70,21 +71,27 @@ function Login() {
         }
     }
 
+    useEffect(() => {
+        activeProfile();
+    });
+
     return (
-        <form onSubmit={submitForm}>
-            <h1>Login</h1><br/>
-            <div style={{color: 'red'}}>
-                <p>{ warningMsg }</p>
-                <p>{ msgLoginUnsuccessful }</p>
-                {(warningMsg || msgLoginUnsuccessful) ? <br/> : null}
-            </div>
-            <label htmlFor="uname" id="label-uname">Username:</label><br/>
-            <input type="text" id="uname" name="uname"/><br/>
-            <label htmlFor="pwd" id="label-pwd">Password:</label><br/>
-            <input type="password" id="pwd" name="pwd"/><br/>
-            <br/><button type="submit">Login</button><br/><br/>
-            <p>Don't have an account? <a href='/register'>Register.</a></p>
-        </form>
+        <div className="w3-margin">
+            <form onSubmit={submitForm}>
+                <h1>Login</h1><br />
+                <div style={{ color: 'red' }}>
+                    <p>{warningMsg}</p>
+                    <p>{msgLoginUnsuccessful}</p>
+                    {(warningMsg || msgLoginUnsuccessful) ? <br /> : null}
+                </div>
+                <label htmlFor="uname" id="label-uname">Username:</label><br />
+                <input type="text" id="uname" name="uname" /><br />
+                <label htmlFor="pwd" id="label-pwd">Password:</label><br />
+                <input type="password" id="pwd" name="pwd" /><br />
+                <br /><button className="w3-btn w3-white w3-border w3-border-black w3-round w3-margin-top" type="submit">Login</button><br /><br />
+                <p>Don't have an account? <a href='/register'>Register.</a></p>
+            </form>
+        </div>
     );
 }
 
