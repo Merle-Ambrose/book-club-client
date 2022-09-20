@@ -31,7 +31,7 @@ function WriteBook() {
 
   useEffect(() => {
     // Check the url and make sure it is in the right format
-    axios.get(domainAPI + "book/" + bookId + "/chapter/" + chapterId + "/", {crossdomain: true})
+    axios.get(domainAPI + "book/" + bookId + "/chapter/" + chapterId + "/false", {crossdomain: true})
       .then((response) => {
         if(!response.data.chapter) {
             setLeftChapterValid(false);

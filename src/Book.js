@@ -13,7 +13,7 @@ function Book() {
 
   useEffect(() => {
     // Check the url and make sure it is in the right format
-    axios.get(domainAPI + "book/" + bookId + "/chapter/" + chapterId + "/", {crossdomain: true})
+    axios.get(domainAPI + "book/" + bookId + "/chapter/" + chapterId + "/true", {crossdomain: true})
       .then((response) => {
         console.log(response.data);
         if(!response.data.chapter) {
