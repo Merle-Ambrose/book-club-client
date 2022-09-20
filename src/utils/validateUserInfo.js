@@ -7,7 +7,7 @@ export function validateEmail(email) {
 }
 
 export async function unameUnique(uname) {
-    axios.get(domainAPI + "find/" + uname, {crossdomain: true})
+    axios.get(domainAPI + "user/find/" + uname, {crossdomain: true})
         .then((response) => {
             console.log(response.data.isUnique);
             return response.data.isUnique;

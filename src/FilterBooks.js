@@ -18,7 +18,7 @@ function FilterBooks() {
 
     // Get the total number of books (for computing pages)
     // AND the current page's book list information
-    const result = await axios.get(domainAPI + "bookFilter/" + genre + "/" + language + "/" + views + "/" + wordcount + "/" +  numberPerPage + "/" + currPage, {crossdomain: true})
+    const result = await axios.get(domainAPI + "book/filter/" + genre + "/" + language + "/" + views + "/" + wordcount + "/" +  numberPerPage + "/" + currPage, {crossdomain: true})
         .then((result) => {
           return result.data;
         })

@@ -33,7 +33,7 @@ function CreateBook() {
             if(characters.length === 1 && characters[0] === "") characters = [];
             if(tags.length === 1 && tags[0] === "") tags = [];
 
-            authAxios.post(domainAPI + "bookCreate", {
+            authAxios.post(domainAPI + "book/create", {
                 title: title,
                 summary: summary,
                 tws: tws,

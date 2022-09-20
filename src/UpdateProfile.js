@@ -81,7 +81,7 @@ function UpdateProfile() {
         else {
             setWarningMsg('');
             if(!pwdUpdate) {
-                authAxios.post(domainAPI + "updateUserNotPwd/", {
+                authAxios.post(domainAPI + "user/updateNotPwd", {
                     email: email,
                     fname: fname,
                     lname: lname,
@@ -96,7 +96,7 @@ function UpdateProfile() {
                     });
             }
             else {
-                authAxios.post(domainAPI + "updateUser/", {
+                authAxios.post(domainAPI + "user/update", {
                     email: email,
                     pwd: pwd,
                     fname: fname,
@@ -116,7 +116,7 @@ function UpdateProfile() {
 
     useEffect(() => {
         isUserLoggedIn();
-        authAxios.get(domainAPI + "getUser", {crossdomain: true})
+        authAxios.get(domainAPI + "user/get", {crossdomain: true})
             .then((result) => {
                 document.getElementById("fname").value = result.data.fname;
                 document.getElementById("lname").value = result.data.lname;

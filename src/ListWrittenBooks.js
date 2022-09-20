@@ -9,7 +9,7 @@ function ListWrittenBooks() {
 
     useEffect(() => {
         isUserLoggedIn();
-        authAxios.get(domainAPI + "getAllUserBooks", { crossdomain: true })
+        authAxios.get(domainAPI + "user/getAllBooks", { crossdomain: true })
             .then((result) => {
                 let books = result.data;
                 for(let i = 0; i < books.length; i++) {

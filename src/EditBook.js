@@ -24,7 +24,7 @@ function EditBook() {
     function deleteBook() {
         isUserLoggedIn();
         setNoAccessStatus();
-        authAxios.post("/bookDelete", {
+        authAxios.post(domainAPI + "book/delete", {
             bookId: bookId
         }, {crossdomain: true})
             .then((response) => {
@@ -64,7 +64,7 @@ function EditBook() {
             if(characters.length === 1 && characters[0] === "") characters = [];
             if(tags.length === 1 && tags[0] === "") tags = [];
 
-            authAxios.put(domainAPI + "bookUpdate", {
+            authAxios.put(domainAPI + "book/update", {
                 title: title,
                 summary: summary,
                 tws: tws,

@@ -14,7 +14,7 @@ function WriteBook() {
   // Button that saves the user's work
   function saveChapter() {
     isUserLoggedIn();
-    authAxios.put(domainAPI + "updateChapter", {
+    authAxios.put(domainAPI + "book/chapter/update", {
       title: document.getElementById('title').value,
       authorNote: document.getElementById('authorNote').value,
       textContents: document.getElementById('textContents').value,
@@ -58,7 +58,7 @@ function WriteBook() {
   
   function addChapter() {
     isUserLoggedIn();
-    authAxios.post(domainAPI + "createEmptyChapter", {
+    authAxios.post(domainAPI + "book/chapter/createEmpty", {
       bookId: bookId
     }, {crossdomain: true})
     .then((response) => {
@@ -79,7 +79,7 @@ function WriteBook() {
   // Button that deletes the current chapter
   function deleteChapter() {
     isUserLoggedIn();
-    authAxios.post(domainAPI + "chapterDelete", {
+    authAxios.post(domainAPI + "book/chapter/delete", {
       bookId: bookId,
       chapterIndex: chapterId
     }, {crossdomain: true})
