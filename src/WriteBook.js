@@ -30,6 +30,51 @@ function WriteBook() {
       });
   }
 
+  function addChapter() {
+    isUserLoggedIn();
+    console.log("Adding new chapter");
+    authAxios.post(domainAPI + "book/chapter/createEmpty", {
+      bookId: bookId
+    }, { crossdomain: true })
+      .then((response) => {
+        console.log("Added a new chapter");
+        alert("Created a new chapter! Redirecting to it now...");
+        if (!currentChapterValid) {
+          window.location.assign(domainClient + "write/" + bookId + "/chapter/0/");
+        }
+        else {
+          window.location.assign(domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) + 1) + "/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  // Button that deletes the current chapter
+  function deleteChapter() {
+    isUserLoggedIn();
+    authAxios.post(domainAPI + "book/chapter/delete", {
+      bookId: bookId,
+      chapterIndex: chapterId
+    }, { crossdomain: true })
+      .then((response) => {
+        if (currentChapterValid) {
+          alert("Chapter deleted!");
+        }
+        if (!rightChapterValid && leftChapterValid) {
+          window.location.assign(domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) - 1) + "/");
+        }
+        else {
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        alert("Chapter cannot be deleted at this time.");
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     activeWrite();
     // Check the url and make sure it is in the right format
@@ -56,51 +101,6 @@ function WriteBook() {
         document.getElementById('textContents').value = "Error fetching book data. This book/chapter does not exist.";
       });
   }, [bookId, chapterId, leftChapterValid, rightChapterValid, currentChapterValid]);
-
-
-  function addChapter() {
-    isUserLoggedIn();
-    authAxios.post(domainAPI + "book/chapter/createEmpty", {
-      bookId: bookId
-    }, { crossdomain: true })
-      .then((response) => {
-        alert("Created a new chapter! Redirecting to it now...");
-        if (!currentChapterValid) {
-          window.location.assign(domainClient + "write/" + bookId + "/chapter/0/");
-        }
-        else {
-          window.location.assign(domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) + 1) + "/");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-
-  // Button that deletes the current chapter
-  function deleteChapter() {
-    isUserLoggedIn();
-    authAxios.post(domainAPI + "book/chapter/delete", {
-      bookId: bookId,
-      chapterIndex: chapterId
-    }, { crossdomain: true })
-      .then((response) => {
-        if (currentChapterValid) {
-          alert("Chapter deleted!");
-        }
-        if (!rightChapterValid && leftChapterValid) {
-          window.location.assign(domainClient + "write/" + bookId + "/chapter/" + (parseInt(chapterId) - 1) + "/");
-        }
-        else {
-          window.location.reload();
-        }
-      })
-      .catch((error) => {
-        alert("Chapter cannot be deleted at this time.");
-        console.log(error);
-      });
-  }
 
   return (
     <>

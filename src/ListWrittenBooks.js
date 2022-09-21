@@ -7,30 +7,39 @@ import { activeWrite } from './utils/w3utils';
 
 function ListWrittenBooks() {
     const [userBooks, setUserBooks] = useState([]);
+    let useEffectCalled = false;
 
-    useEffect(() => {
-        activeWrite();
-        isUserLoggedIn();
-        authAxios.get(domainAPI + "user/getAllBooks", { crossdomain: true })
+    async function loadList() {
+        setUserBooks([]);
+        let books = await authAxios.get(domainAPI + "user/getAllBooks", { crossdomain: true })
             .then((result) => {
-                let books = result.data;
-                for (let i = 0; i < books.length; i++) {
-                    axios.get(domainAPI + "book/" + books[i], { crossdomain: true })
-                        .then((response) => {
-                            if (response.data) {
-                                setUserBooks(userBooks => [...userBooks, response.data]);
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                            console.log("Error: cannot load books at this time.");
-                        });
-                }
+                return result.data;
             })
             .catch((error) => {
                 alert("Something went wrong!" + error);
                 console.log(error);
             });
+        for (let i = 0; i < books.length; i++) {
+            axios.get(domainAPI + "book/" + books[i], { crossdomain: true })
+                .then((response) => {
+                    if (response.data) {
+                        setUserBooks(userBooks => [...userBooks, response.data]);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    console.log("Error: cannot load books at this time.");
+                });
+        }
+    }
+
+    useEffect(() => {
+        if(!useEffectCalled) {
+            activeWrite();
+            isUserLoggedIn();
+            loadList();
+        }
+        useEffectCalled = true;
     }, []);
 
     return (
